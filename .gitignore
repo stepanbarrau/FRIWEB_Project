@@ -1,3 +1,9 @@
-labs
+# Repository configuration
+venv
+__pycache__
+
+# Dataset
+data_location.config
 pa1-data
 queries
+labs
