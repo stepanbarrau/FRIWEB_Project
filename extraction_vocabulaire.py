@@ -32,8 +32,8 @@ def main():
     corpus = load_data()
     for key in corpus:
         raw_words = article_tokenize_simple(corpus[key])
-        print(collections.Counter(raw_words))
+        word_counter = collections.Counter(raw_words)
+        for word in word_counter:
+            print(f"{word} : {word_counter[word]}")
         break
 
-
-main()
