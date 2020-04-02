@@ -1,6 +1,7 @@
 # Repository configuration
 venv
 __pycache__
+.DS_Store
 
 # Dataset
 data_location.config
