@@ -1,6 +1,7 @@
 import collections
 from load_documents import load_data
 
+
 def article_tokenize_simple(text):
     """
     separates text into tokens with space as separator

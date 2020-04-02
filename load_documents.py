@@ -1,5 +1,6 @@
 from pathlib import Path
 import configparser
+import os
 
 
 def load_data():
@@ -11,29 +12,27 @@ def load_data():
     config.readfp(open(r'data_location.config'))
     data_path = config.get('data_path', 'data_path')
 
-
     corpus = {}
-    parse_file_tree(data_path, corpus,0)
+    parse_file_tree(data_path, corpus)
     print("done")
 
     return corpus
 
 
-def parse_file_tree(path_name, corpus, depth):
+def parse_file_tree(path_name, corpus):
     """
     recursively adds texts to corpus
     :param path_name: starting path (string)
     :param corpus: dictionary of texts
     :return: None
     """
-
     path = Path(path_name)
     print(path.name)
     for p in path.glob('*'):
         if p.is_dir():
-            parse_file_tree(path_name + "/" + p.name, corpus, depth + 1)
+            parse_file_tree(os.path.join(path_name, p.name), corpus)
         else:
-            load_file_to_corpus(path_name + "/" + p.name, corpus)
+            load_file_to_corpus(os.path.join(path_name, p.name), corpus)
 
 
 def load_file_to_corpus(filename, corpus):
