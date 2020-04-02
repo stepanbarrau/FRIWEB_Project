@@ -1,5 +1,5 @@
 import collections
-
+from load_documents import load_data
 
 def article_tokenize_simple(text):
     """
@@ -27,4 +27,12 @@ def article_remove_stop_words(text_tokens,stop_word_file):
     return(text_tokens)
 
 
-print(article_tokenize_simple("lala lulu lolo"))
+def main():
+    corpus = load_data()
+    for key in corpus:
+        raw_words = article_tokenize_simple(corpus[key])
+        print(collections.Counter(raw_words))
+        break
+
+
+main()

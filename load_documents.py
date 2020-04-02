@@ -10,15 +10,30 @@ def load_data():
     config = configparser.ConfigParser()
     config.readfp(open(r'data_location.config'))
     data_path = config.get('data_path', 'data_path')
-    path = Path(data_path)
+
 
     corpus = {}
-
-    for p in path.rglob('*'):
-        if not p.is_dir():
-            load_file_to_corpus(p.name, corpus)
+    parse_file_tree(data_path, corpus,0)
+    print("done")
 
     return corpus
+
+
+def parse_file_tree(path_name, corpus, depth):
+    """
+    recursively adds texts to corpus
+    :param path_name: starting path (string)
+    :param corpus: dictionary of texts
+    :return: None
+    """
+
+    path = Path(path_name)
+    print(path.name)
+    for p in path.glob('*'):
+        if p.is_dir():
+            parse_file_tree(path_name + "/" + p.name, corpus, depth + 1)
+        else:
+            load_file_to_corpus(path_name + "/" + p.name, corpus)
 
 
 def load_file_to_corpus(filename, corpus):
