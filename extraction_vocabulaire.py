@@ -44,5 +44,3 @@ def main():
         print(len(raw_words) - len(filtered_words), "stop word removed")
         break
 
-
-main()
