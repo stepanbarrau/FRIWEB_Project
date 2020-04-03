@@ -16,7 +16,7 @@ def article_tokenize_simple(text):
     if type(text) != str:
         raise Exception("The function takes a string as input data")
     else:
-        tokens = word_tokenize(text)
+        tokens = text.split(" ")
         return tokens
 
 
