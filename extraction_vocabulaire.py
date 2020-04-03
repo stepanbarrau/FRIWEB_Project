@@ -1,5 +1,9 @@
 import collections
 import configparser
+from nltk.tokenize import word_tokenize
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+
 from load_documents import load_data, load_stop_words
 
 
@@ -12,7 +16,7 @@ def article_tokenize_simple(text):
     if type(text) != str:
         raise Exception("The function takes a string as input data")
     else:
-        tokens = text.split(" ")
+        tokens = word_tokenize(text)
         return tokens
 
 
@@ -29,6 +33,16 @@ def article_remove_stop_words(text_tokens, stop_words):
     return(text_tokens)
 
 
+def article_lemmatize(tokens):
+    lemmatizer = WordNetLemmatizer()
+    return [lemmatizer.lemmatize(token) for token in tokens]
+
+
+def article_stemming(tokens):
+    stemmer = PorterStemmer()
+    return [stemmer.stem(token) for token in tokens]
+
+
 def main():
     config = configparser.ConfigParser()
     config.read_file(open(r'data_location.config'))
@@ -42,7 +56,11 @@ def main():
         print(collections.Counter(raw_words))
         filtered_words = article_remove_stop_words(raw_words, stop_words)
         print(len(raw_words) - len(filtered_words), "stop word removed")
+        lemmatized_words = article_lemmatize(filtered_words)
+        stemmed_words = article_stemming(lemmatized_words)
+        print(collections.Counter(stemmed_words))
         break
 
 
-main()
+if __name__ == "__main__":
+    main()
