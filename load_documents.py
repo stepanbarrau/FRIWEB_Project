@@ -39,4 +39,5 @@ def parse_file_tree(path_name, corpus):
 def load_file_to_corpus(filename, corpus):
     with open(filename, 'r') as f:
         corpus[filename] = f.read()
+        f.close()
 
