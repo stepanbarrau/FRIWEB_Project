@@ -134,8 +134,6 @@ def load_index_from_file(filename, type):
     return index, df
 
 
-
-
 def test():
     corpus = load_data()
     index, df = build_index(corpus, 0)
