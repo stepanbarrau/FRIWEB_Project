@@ -36,6 +36,9 @@ def parse_file_tree(path_name, corpus):
             load_file_to_corpus(os.path.join(path_name, p.name), corpus)
 
 
-def load_file_to_corpus(filename, corpus):
-    with open(filename, 'r') as f:
-        corpus[filename] = f.read()
+def load_file_to_corpus(filepath, corpus):
+    with open(filepath, 'r') as f:
+        path, filename = os.path.split(filepath)
+        _, folder = os.path.split(path)
+        key = os.path.join(folder, filename)
+        corpus[key] = f.read()
