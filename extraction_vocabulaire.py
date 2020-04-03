@@ -43,6 +43,17 @@ def article_stemming(tokens):
     return [stemmer.stem(token) for token in tokens]
 
 
+def get_collection_from_corpus(corpus, stop_words):
+    collection = {}
+    for key in corpus:
+        raw_words = article_tokenize_simple(corpus[key])
+        filtered_words = article_remove_stop_words(raw_words, stop_words)
+        lemmatized_words = article_lemmatize(filtered_words)
+        stemmed_words = article_stemming(lemmatized_words)
+        collection[key] = stemmed_words
+    return collection
+
+
 def main():
     config = configparser.ConfigParser()
     config.read_file(open(r'data_location.config'))
@@ -51,15 +62,9 @@ def main():
 
     corpus = load_data(data_path)
     stop_words = load_stop_words(stop_words_path)
-    for key in corpus:
-        raw_words = article_tokenize_simple(corpus[key])
-        print(collections.Counter(raw_words))
-        filtered_words = article_remove_stop_words(raw_words, stop_words)
-        print(len(raw_words) - len(filtered_words), "stop word removed")
-        lemmatized_words = article_lemmatize(filtered_words)
-        stemmed_words = article_stemming(lemmatized_words)
-        print(collections.Counter(stemmed_words))
-        break
+
+    collection = get_collection_from_corpus(corpus, stop_words)
+    print(collection)
 
 
 if __name__ == "__main__":
