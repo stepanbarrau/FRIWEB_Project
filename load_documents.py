@@ -1,22 +1,23 @@
 from pathlib import Path
-import configparser
 import os
 
 
-def load_data():
+def load_data(data_path):
     """
     browses directory path in data_location.config:data_path
     :return: a dictionary with keys as filenames (string) and content as file content (string)
     """
-    config = configparser.ConfigParser()
-    config.readfp(open(r'data_location.config'))
-    data_path = config.get('data_path', 'data_path')
-
     corpus = {}
     parse_file_tree(data_path, corpus)
     print("done")
 
     return corpus
+
+
+def load_stop_words(filename):
+    with open(filename, 'r') as f:
+        maj_stop_words = filter(lambda s: s != "", f.read().split("\n\n"))
+        return [s.lower() for s in maj_stop_words]
 
 
 def parse_file_tree(path_name, corpus):
@@ -38,5 +39,3 @@ def parse_file_tree(path_name, corpus):
 def load_file_to_corpus(filename, corpus):
     with open(filename, 'r') as f:
         corpus[filename] = f.read()
-
-
