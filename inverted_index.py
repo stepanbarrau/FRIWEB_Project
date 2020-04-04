@@ -1,9 +1,9 @@
 import collections
-from enum import Enum
 import pickle
-from extraction_vocabulaire import get_collection_from_corpus
-from load_documents import load_data, load_stop_words
-import configparser
+from enum import Enum
+from collection_processing import get_collection_from_corpus
+from data_processing import load_data, load_stop_words
+from config_utils import load_config
 
 
 class IndexType(Enum):
@@ -71,8 +71,7 @@ def load_df_from_file(filename):
 
 
 def test():
-    config = configparser.ConfigParser()
-    config.read_file(open(r'data_location.config'))
+    config = load_config()
     data_path = config.get('data_path', 'data_path')
     stop_words_path = config.get('stop_words_path', 'stop_words_path')
 
