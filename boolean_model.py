@@ -3,29 +3,18 @@ from collections import Counter
 from collection_processing import process_text
 
 
-def query_to_postfixe(query_tokens):
-    """
-    reorder query tokens in postfixe order (Reverse Polish notation) 
-    :param query_tokens: query words (list of string)
-    :return: query words in postfixe order (list of string)
-    """
-    query = " ".join(query_tokens)
-    b = BooleanExpression(query)
-    return b.postfix_tokens
-
-
 def processed_query_to_and_boolean(query_tokens):
     """
     transform query tokens to boolean query tokens
     :param query_tokens: query words (list of string)
     :return: query tokens with "and" between (list of string)
     """
-    boolean_query = []
-    for token in query_tokens:
-        boolean_query.append(token)
+    # Copy query
+    boolean_query = [token for token in query_tokens]
+    for _ in range(len(query_tokens) - 1):
+        # Reverse Polish notation
         boolean_query.append('and')
-    boolean_query.pop()
-    return query_to_postfixe(boolean_query)
+    return boolean_query
 
 
 def merge_and_postings_list(posting_term1, posting_term2):
@@ -102,17 +91,20 @@ def boolean_operator_processing_with_inverted_index(boolean_operator, posting_te
 def process_boolean_query_with_inverted_index(query, inverted_index, boolean_operators=["and", "or", "not"]):
     evaluation_stack = []
     for term in query:
-        if term.upper() not in boolean_operators:
-            evaluation_stack.append(inverted_index[term.upper()])
+        if term not in boolean_operators:
+            if term not in inverted_index.keys():
+                raise Exception("One term is not in the index")
+            else:
+                evaluation_stack.append(inverted_index[term])
         else:
-            if term.upper() == "not":
+            if term == "not":
                 operande = evaluation_stack.pop()
                 eval_prop = boolean_operator_processing_with_inverted_index(
-                    term.upper(), evaluation_stack.pop(), operande)
+                    term, evaluation_stack.pop(), operande)
                 evaluation_stack.append(eval_prop[0])
                 evaluation_stack.append(eval_prop[0])
             else:
-                operator = term.upper()
+                operator = term
                 eval_prop = boolean_operator_processing_with_inverted_index(
                     operator, evaluation_stack.pop(), evaluation_stack.pop())
                 evaluation_stack.append(eval_prop[0])
@@ -128,8 +120,14 @@ def process_query_boolean(query, inverted_index, stop_words):
     :return: documents relevant for the query (list of string)
     """
     processed_query = process_text(query, stop_words)
+    # Filter off words that are not in the index
+    processed_query = list(filter(
+        lambda token: token in inverted_index.keys(), processed_query))
     boolean_query = processed_query_to_and_boolean(processed_query)
-    return process_boolean_query_with_inverted_index(boolean_query, inverted_index)
+    if (len(boolean_query) > 0):
+        return process_boolean_query_with_inverted_index(boolean_query, inverted_index)
+    else:
+        return []
 
 
 if __name__ == "__main__":
