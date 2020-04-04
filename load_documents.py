@@ -42,3 +42,5 @@ def load_file_to_corpus(filepath, corpus):
         _, folder = os.path.split(path)
         key = os.path.join(folder, filename)
         corpus[key] = f.read()
+
+
