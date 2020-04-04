@@ -3,14 +3,25 @@ from collections import Counter
 from query_processing import process_query
 
 
-def query_to_postfixe(query):
+def query_to_postfixe(query_tokens):
+    """
+    reorder query tokens in postfixe order (Reverse Polish notation) 
+    :param query_tokens: query words (list of string)
+    :return: query words in postfixe order (list of string)
+    """
+    query = " ".join(query_tokens)
     b = BooleanExpression(query)
     return b.postfix_tokens
 
 
-def query_to_and_boolean(processed_query):
+def processed_query_to_and_boolean(query_tokens):
+    """
+    transform query tokens to boolean query tokens
+    :param query_tokens: query words (list of string)
+    :return: query tokens with "and" between (list of string)
+    """
     boolean_query = []
-    for token in processed_query:
+    for token in query_tokens:
         boolean_query.append(token)
         boolean_query.append('and')
     boolean_query.pop()
@@ -108,12 +119,20 @@ def process_boolean_query_with_inverted_index(query, inverted_index, boolean_ope
     return evaluation_stack.pop()
 
 
-def process_query_boolean(query, inverted_index):
-    boolean_query = query_to_and_boolean(query)
+def process_query_boolean(query, inverted_index, stop_words):
+    """
+    find relevant documents for given query using boolean model on inverted_index
+    :param query: (string)
+    :param inverted_index: (dict string -> string)
+    :param stop_words: to filter stop words in query (list of string)
+    :return: documents relevant for the query (list of string)
+    """
+    processed_query = process_query(query, stop_words)
+    boolean_query = processed_query_to_and_boolean(processed_query)
     return process_boolean_query_with_inverted_index(boolean_query, inverted_index)
 
 
 if __name__ == "__main__":
-    query = "we are"
-    boolean_query = query_to_and_boolean(query)
+    query = ["we", "are"]
+    boolean_query = processed_query_to_and_boolean(query)
     print(boolean_query)
