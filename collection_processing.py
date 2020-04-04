@@ -1,10 +1,10 @@
 import collections
-import configparser
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 
-from load_documents import load_data, load_stop_words
+from data_processing import load_data, load_stop_words
+from config_utils import load_config
 
 
 def tokenize_simple(text):
@@ -55,8 +55,7 @@ def get_collection_from_corpus(corpus, stop_words):
 
 
 def main():
-    config = configparser.ConfigParser()
-    config.read_file(open(r'data_location.config'))
+    config = load_config()
     data_path = config.get('data_path', 'data_path')
     stop_words_path = config.get('stop_words_path', 'stop_words_path')
 
