@@ -56,11 +56,12 @@ def test():
     collection = get_collection_from_corpus(corpus, stop_words)
     index, df = build_index(collection, IndexType.SIMPLE)
 
-    pickle_save_data_to_file(index, "data/index/test_index_file.txt")
-    index_loaded = pickle_load_from_file("data/index/test_index_file.txt")
+    pickle_save_data_to_file(index, config.get('index_path', 'index_path'))
+    index_loaded = pickle_load_from_file(
+        config.get('index_path', 'index_path'))
 
-    pickle_save_data_to_file(df, "data/index/test_df_file.txt")
-    df_loaded = pickle_load_from_file("data/index/test_df_file.txt")
+    pickle_save_data_to_file(df, config.get('df_path', 'df_path'))
+    df_loaded = pickle_load_from_file(config.get('df_path', 'df_path'))
 
     no_error = True
     for term in index:

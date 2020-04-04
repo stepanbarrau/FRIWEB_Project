@@ -1,13 +1,12 @@
 from config_utils import load_config
-from data_processing import load_stop_words
-from inverted_index import load_index_from_file
+from data_processing import load_stop_words, pickle_load_from_file
 from boolean_model import process_query_boolean
 
 if __name__ == "__main__":
     config = load_config()
     stop_words = load_stop_words(config.get(
         'stop_words_path', 'stop_words_path'))
-    inv_index = load_index_from_file("test_index_file4.txt")
+    inv_index = pickle_load_from_file(config.get('index_path', 'index_path'))
     query1 = "stanford"
     query2 = "stanford class avm"
     query3 = "class"
