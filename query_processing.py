@@ -1,4 +1,4 @@
-from extraction_vocabulaire import tokenize_simple, remove_stop_words, lemmatize, stemming
+from collection_processing import tokenize_simple, remove_stop_words, lemmatize, stemming
 
 
 def process_query(query, stop_words):

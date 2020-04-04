@@ -1,6 +1,6 @@
 from tt import BooleanExpression
 from collections import Counter
-from query import process_query
+from query_processing import process_query
 
 
 def query_to_postfixe(query):
@@ -111,3 +111,9 @@ def process_boolean_query_with_inverted_index(query, inverted_index, boolean_ope
 def process_query_boolean(query, inverted_index):
     boolean_query = query_to_and_boolean(query)
     return process_boolean_query_with_inverted_index(boolean_query, inverted_index)
+
+
+if __name__ == "__main__":
+    query = "we are"
+    boolean_query = query_to_and_boolean(query)
+    print(boolean_query)
