@@ -23,7 +23,9 @@ def build_index(collection, type):
 
     index = {}
     df = {}
+    print("start building index")
     for text_name in collection:
+        print("build index for {text_name}")
         term_counter = collections.Counter(collection[text_name])
 
         if type == IndexType.SIMPLE:
@@ -41,7 +43,7 @@ def build_index(collection, type):
 
                 index[term].append((text_name, term_counter[term]))
                 df[term] += 1
-
+    print("done building index")
     return index, df
 
 
