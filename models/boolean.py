@@ -3,18 +3,18 @@ from collections import Counter
 from query import process_query
 
 
+def query_to_postfixe(query):
+    b = BooleanExpression(query)
+    return b.postfix_tokens
+
+
 def query_to_and_boolean(processed_query):
     boolean_query = []
     for token in processed_query:
         boolean_query.append(token)
-        boolean_query.append('AND')
+        boolean_query.append('and')
     boolean_query.pop()
-    return boolean_query
-
-
-def query_to_postfixe(query):
-    b = BooleanExpression(query)
-    return b.postfix_tokens
+    return query_to_postfixe(boolean_query)
 
 
 def merge_and_postings_list(posting_term1, posting_term2):
@@ -78,23 +78,23 @@ def merge_and_not_postings_list(posting_term1, posting_term2):
 
 def boolean_operator_processing_with_inverted_index(boolean_operator, posting_term1, posting_term2):
     result = []
-    if boolean_operator == "AND":
+    if boolean_operator == "and":
         result.append(merge_and_postings_list(posting_term1, posting_term2))
-    elif boolean_operator == "OR":
+    elif boolean_operator == "or":
         result.append(merge_or_postings_list(posting_term1, posting_term2))
-    elif boolean_operator == "NOT":
+    elif boolean_operator == "not":
         result.append(merge_and_not_postings_list(
             posting_term1, posting_term2))
     return result
 
 
-def process_boolean_query_with_inverted_index(query, inverted_index, boolean_operators=["AND", "OR", "NOT"]):
+def process_boolean_query_with_inverted_index(query, inverted_index, boolean_operators=["and", "or", "not"]):
     evaluation_stack = []
     for term in query:
         if term.upper() not in boolean_operators:
             evaluation_stack.append(inverted_index[term.upper()])
         else:
-            if term.upper() == "NOT":
+            if term.upper() == "not":
                 operande = evaluation_stack.pop()
                 eval_prop = boolean_operator_processing_with_inverted_index(
                     term.upper(), evaluation_stack.pop(), operande)
