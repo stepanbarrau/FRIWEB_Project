@@ -3,7 +3,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 
-from data_processing import load_data, load_stop_words
+from data_processing import load_data, load_stop_words, pickle_save_data_to_file, pickle_load_from_file
 from config_utils import load_config
 
 
@@ -59,8 +59,11 @@ def process_text(text, stop_words):
 
 def get_collection_from_corpus(corpus, stop_words):
     collection = {}
+    print("start building collection")
     for key in corpus:
+        print("procession {key}")
         collection[key] = process_text(corpus[key], stop_words)
+    print("done building collection")
     return collection
 
 
@@ -73,9 +76,17 @@ def main():
     stop_words = load_stop_words(stop_words_path)
 
     collection = get_collection_from_corpus(corpus, stop_words)
-    print(collection)
+
+    pickle_save_data_to_file(
+        collection, config.get('collection_path', 'collection_path'))
+    collection_loaded = pickle_load_from_file(
+        config.get('collection_path', 'collection_path'))
+
+    for term in collection:
+        if term not in collection_loaded or collection[term] != collection_loaded[term]:
+            raise Exception(
+                "There is a discrepancy between the collection and the loaded data")
 
 
 if __name__ == "__main__":
     main()
-
