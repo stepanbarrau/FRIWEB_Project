@@ -7,7 +7,7 @@ from nltk.stem import WordNetLemmatizer
 from load_documents import load_data, load_stop_words
 
 
-def article_tokenize_simple(text):
+def tokenize_simple(text):
     """
     separates text into tokens with space as separator
     :param text: input text (string)
@@ -20,7 +20,7 @@ def article_tokenize_simple(text):
         return tokens
 
 
-def article_remove_stop_words(text_tokens, stop_words):
+def remove_stop_words(text_tokens, stop_words):
     """
     removes words in stop_words from text_tokens
     :param text_tokens: (list of string)
@@ -33,12 +33,12 @@ def article_remove_stop_words(text_tokens, stop_words):
     return(text_tokens)
 
 
-def article_lemmatize(tokens):
+def lemmatize(tokens):
     lemmatizer = WordNetLemmatizer()
     return [lemmatizer.lemmatize(token) for token in tokens]
 
 
-def article_stemming(tokens):
+def stemming(tokens):
     stemmer = PorterStemmer()
     return [stemmer.stem(token) for token in tokens]
 
@@ -46,10 +46,10 @@ def article_stemming(tokens):
 def get_collection_from_corpus(corpus, stop_words):
     collection = {}
     for key in corpus:
-        raw_words = article_tokenize_simple(corpus[key])
-        filtered_words = article_remove_stop_words(raw_words, stop_words)
-        lemmatized_words = article_lemmatize(filtered_words)
-        stemmed_words = article_stemming(lemmatized_words)
+        raw_words = tokenize_simple(corpus[key])
+        filtered_words = remove_stop_words(raw_words, stop_words)
+        lemmatized_words = lemmatize(filtered_words)
+        stemmed_words = stemming(lemmatized_words)
         collection[key] = stemmed_words
     return collection
 
