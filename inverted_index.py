@@ -45,7 +45,7 @@ def build_index(collection, type):
     return index, df
 
 
-def test():
+def main():
     config = load_config()
     data_path = config.get('data_path', 'data_path')
     stop_words_path = config.get('stop_words_path', 'stop_words_path')
@@ -75,4 +75,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    main()
