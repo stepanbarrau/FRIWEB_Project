@@ -1,8 +1,7 @@
 import collections
-import pickle
 from enum import Enum
 from collection_processing import get_collection_from_corpus
-from data_processing import load_data, load_stop_words
+from data_processing import load_data, load_stop_words, pickle_save_data_to_file, pickle_load_from_file
 from config_utils import load_config
 
 
@@ -46,30 +45,6 @@ def build_index(collection, type):
     return index, df
 
 
-def save_index_to_file(inverted_index, filename):
-    with open(filename, "wb") as f:
-        pickle.dump(inverted_index, f)
-        f.close()
-
-
-def load_index_from_file(filename):
-    with open(filename, 'rb') as f:
-        index = pickle.load(f)
-        return index
-
-
-def save_df_to_file(df, filename):
-    with open(filename, "wb") as f:
-        pickle.dump(df, f)
-        f.close()
-
-
-def load_df_from_file(filename):
-    with open(filename, 'rb') as f:
-        df = pickle.load(f)
-        return df
-
-
 def test():
     config = load_config()
     data_path = config.get('data_path', 'data_path')
@@ -81,11 +56,11 @@ def test():
     collection = get_collection_from_corpus(corpus, stop_words)
     index, df = build_index(collection, IndexType.SIMPLE)
 
-    save_index_to_file(index, "test_index_file4.txt")
-    index_loaded = load_index_from_file("test_index_file4.txt")
+    pickle_save_data_to_file(index, "data/index/test_index_file.txt")
+    index_loaded = pickle_load_from_file("data/index/test_index_file.txt")
 
-    save_df_to_file(df, "test_df_file4.txt")
-    df_loaded = load_df_from_file("test_df_file4.txt")
+    pickle_save_data_to_file(df, "data/index/test_df_file.txt")
+    df_loaded = pickle_load_from_file("data/index/test_df_file.txt")
 
     no_error = True
     for term in index:
@@ -98,4 +73,5 @@ def test():
     print(f"no_error : {no_error}")
 
 
-test()
+if __name__ == "__main__":
+    test()

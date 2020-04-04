@@ -1,5 +1,6 @@
-from pathlib import Path
 import os
+import pickle
+from pathlib import Path
 
 
 def load_data(data_path):
@@ -44,3 +45,16 @@ def load_file_to_corpus(filepath, corpus):
         corpus[key] = f.read()
 
 
+def pickle_save_data_to_file(data, path):
+    dir, _ = os.path.split(path)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    with open(path, "wb") as f:
+        pickle.dump(data, f)
+        f.close()
+
+
+def pickle_load_from_file(path):
+    with open(path, 'rb') as f:
+        data = pickle.load(f)
+        return data
