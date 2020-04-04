@@ -43,14 +43,24 @@ def stemming(tokens):
     return [stemmer.stem(token) for token in tokens]
 
 
+def process_text(text, stop_words):
+    """
+    split the text into tokens, remove the stop words, lemmatize and stem tokens.
+    :param text: (string)
+    :param stop_words: (list of string)
+    :return: stemmed_words (list of string)
+    """
+    raw_words = tokenize_simple(text)
+    filtered_words = remove_stop_words(raw_words, stop_words)
+    lemmatized_words = lemmatize(filtered_words)
+    stemmed_words = stemming(lemmatized_words)
+    return stemmed_words
+
+
 def get_collection_from_corpus(corpus, stop_words):
     collection = {}
     for key in corpus:
-        raw_words = tokenize_simple(corpus[key])
-        filtered_words = remove_stop_words(raw_words, stop_words)
-        lemmatized_words = lemmatize(filtered_words)
-        stemmed_words = stemming(lemmatized_words)
-        collection[key] = stemmed_words
+        collection[key] = process_text(corpus[key], stop_words)
     return collection
 
 

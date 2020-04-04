@@ -1,6 +1,6 @@
 from tt import BooleanExpression
 from collections import Counter
-from query_processing import process_query
+from collection_processing import process_text
 
 
 def query_to_postfixe(query_tokens):
@@ -127,7 +127,7 @@ def process_query_boolean(query, inverted_index, stop_words):
     :param stop_words: to filter stop words in query (list of string)
     :return: documents relevant for the query (list of string)
     """
-    processed_query = process_query(query, stop_words)
+    processed_query = process_text(query, stop_words)
     boolean_query = processed_query_to_and_boolean(processed_query)
     return process_boolean_query_with_inverted_index(boolean_query, inverted_index)
 
