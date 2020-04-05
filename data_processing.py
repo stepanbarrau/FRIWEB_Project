@@ -86,6 +86,6 @@ def load_results(path):
     with open(path, "r") as f:
         results = f.readlines()
         results = list(
-            map(lambda s: s[:-2] if s.endswith("\n") else s, results))
+            map(lambda s: s[:-1] if s.endswith("\n") else s, results))
         f.close()
     return results
