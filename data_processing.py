@@ -67,8 +67,11 @@ def save_results(results, path):
     :param path: path (string)
     :return: None
     """
-    with open(path, "a") as f:
-        results = map(lambda s: s + "\n", results)
+    dir, _ = os.path.split(path)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    with open(path, "w") as f:
+        results = list(map(lambda s: s + "\n", results))
         f.writelines(results)
         f.close()
 
@@ -82,6 +85,7 @@ def load_results(path):
     results = []
     with open(path, "r") as f:
         results = f.readlines()
-        results = map(lambda s: s[:-2] if s.endswith("\n") else s, results)
+        results = list(
+            map(lambda s: s[:-2] if s.endswith("\n") else s, results))
         f.close()
     return results
