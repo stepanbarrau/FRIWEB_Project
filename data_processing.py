@@ -58,3 +58,30 @@ def pickle_load_from_file(path):
     with open(path, 'rb') as f:
         data = pickle.load(f)
         return data
+
+
+def save_results(results, path):
+    """
+    save a list of document names to a text file
+    :param results: (list of string)
+    :param path: path (string)
+    :return: None
+    """
+    with open(path, "a") as f:
+        results = map(lambda s: s + "\n", results)
+        f.writelines(results)
+        f.close()
+
+
+def load_results(path):
+    """
+    load document names from a text file to a list
+    :param path: path (string)
+    :return results: (list of string)
+    """
+    results = []
+    with open(path, "r") as f:
+        results = f.readlines()
+        results = map(lambda s: s[:-2] if s.endswith("\n") else s, results)
+        f.close()
+    return results

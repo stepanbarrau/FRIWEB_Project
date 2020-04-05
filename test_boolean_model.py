@@ -1,5 +1,5 @@
 from config_utils import load_config
-from data_processing import load_stop_words, pickle_load_from_file, pickle_save_data_to_file
+from data_processing import load_stop_words, pickle_load_from_file, save_results
 from boolean_model import process_query_boolean
 
 if __name__ == "__main__":
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     result3 = process_query_boolean(query3, inv_index, stop_words)
     result4 = process_query_boolean(query4, inv_index, stop_words)
     result8 = process_query_boolean(query8, inv_index, stop_words)
-    pickle_save_data_to_file(result2, "data/boolean_results/result2")
-    pickle_save_data_to_file(result3, "data/boolean_results/result3")
-    pickle_save_data_to_file(result4, "data/boolean_results/result4")
-    pickle_save_data_to_file(result8, "data/boolean_results/result8")
+    save_results(result2, "data/boolean_results/result2")
+    save_results(result3, "data/boolean_results/result3")
+    save_results(result4, "data/boolean_results/result4")
+    save_results(result8, "data/boolean_results/result8")
