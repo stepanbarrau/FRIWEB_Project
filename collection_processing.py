@@ -61,7 +61,7 @@ def get_collection_from_corpus(corpus, stop_words):
     collection = {}
     print("start building collection")
     for key in corpus:
-        print("procession {key}")
+        print(f"processing {key}")
         collection[key] = process_text(corpus[key], stop_words)
     print("done building collection")
     return collection
