@@ -25,8 +25,8 @@ def load_queries_and_output(query_path, query_output_path):
     for p in path.glob('*'):
         _, query_file_name = os.path.split(p)
         query_number = query_file_name.split('.')[-1]
-        query = load_results(p)[0]
-        query_output = load_results(os.path.join(
+        query = load_text_as_strings(p)[0]
+        query_output = load_text_as_strings(os.path.join(
             query_output_path, f'{query_number}.out'))
         queries_and_outputs[query] = query_output
     return queries_and_outputs
@@ -77,10 +77,10 @@ def pickle_load_from_file(path):
         return data
 
 
-def save_results(results, path):
+def save_strings_as_text_file(strings, path):
     """
-    save a list of document names to a text file
-    :param results: (list of string)
+    save a list of strings to a text file, one line per string
+    :param strings: (list of string)
     :param path: path (string)
     :return: None
     """
@@ -88,21 +88,21 @@ def save_results(results, path):
     if not os.path.exists(dir):
         os.makedirs(dir)
     with open(path, "w") as f:
-        results = list(map(lambda s: s + "\n", results))
-        f.writelines(results)
+        strings = list(map(lambda s: s + "\n", strings))
+        f.writelines(strings)
         f.close()
 
 
-def load_results(path):
+def load_text_as_strings(path):
     """
-    load document names from a text file to a list
+    load a text file to a list of strings. One string per line.
     :param path: path (string)
-    :return results: (list of string)
+    :return strings: (list of string)
     """
-    results = []
+    strings = []
     with open(path, "r") as f:
-        results = f.readlines()
-        results = list(
-            map(lambda s: s[:-1] if s.endswith("\n") else s, results))
+        strings = f.readlines()
+        strings = list(
+            map(lambda s: s[:-1] if s.endswith("\n") else s, strings))
         f.close()
-    return results
+    return strings

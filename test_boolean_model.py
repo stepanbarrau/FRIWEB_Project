@@ -1,5 +1,5 @@
 from config_utils import load_config
-from data_processing import load_stop_words, pickle_load_from_file, save_results, load_results, load_queries_and_output
+from data_processing import load_stop_words, pickle_load_from_file, load_queries_and_output
 from boolean_model import process_query_boolean
 
 if __name__ == "__main__":
