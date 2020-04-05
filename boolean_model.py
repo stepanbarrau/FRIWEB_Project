@@ -119,14 +119,12 @@ def process_query_boolean(query, inverted_index, stop_words):
     :param stop_words: to filter stop words in query (list of string)
     :return: documents relevant for the query (list of string)
     """
-    print(f"transforming query {query} to boolean query")
     processed_query = process_text(query, stop_words)
     # Filter off words that are not in the index
     processed_query = list(filter(
         lambda token: token in inverted_index.keys(), processed_query))
     boolean_query = processed_query_to_and_boolean(processed_query)
     if (len(boolean_query) > 0):
-        print(f"processing boolean query {boolean_query} with boolean model")
         return process_boolean_query_with_inverted_index(boolean_query, inverted_index)
     else:
         print("boolean query is empty: returning empty result")
