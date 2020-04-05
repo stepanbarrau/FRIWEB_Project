@@ -1,8 +1,7 @@
 import collections
-import pickle
 from enum import Enum
 from collection_processing import get_collection_from_corpus
-from data_processing import load_data, load_stop_words
+from data_processing import load_data, load_stop_words, pickle_save_data_to_file, pickle_load_from_file
 from config_utils import load_config
 
 
@@ -24,7 +23,9 @@ def build_index(collection, type):
 
     index = {}
     df = {}
+    print("start building index")
     for text_name in collection:
+        print(f"build index for {text_name}")
         term_counter = collections.Counter(collection[text_name])
 
         if type == IndexType.SIMPLE:
@@ -42,35 +43,11 @@ def build_index(collection, type):
 
                 index[term].append((text_name, term_counter[term]))
                 df[term] += 1
-
+    print("done building index")
     return index, df
 
 
-def save_index_to_file(inverted_index, filename):
-    with open(filename, "wb") as f:
-        pickle.dump(inverted_index, f)
-        f.close()
-
-
-def load_index_from_file(filename):
-    with open(filename, 'rb') as f:
-        index = pickle.load(f)
-        return index
-
-
-def save_df_to_file(df, filename):
-    with open(filename, "wb") as f:
-        pickle.dump(df, f)
-        f.close()
-
-
-def load_df_from_file(filename):
-    with open(filename, 'rb') as f:
-        df = pickle.load(f)
-        return df
-
-
-def test():
+def main():
     config = load_config()
     data_path = config.get('data_path', 'data_path')
     stop_words_path = config.get('stop_words_path', 'stop_words_path')
@@ -81,11 +58,12 @@ def test():
     collection = get_collection_from_corpus(corpus, stop_words)
     index, df = build_index(collection, IndexType.SIMPLE)
 
-    save_index_to_file(index, "test_index_file4.txt")
-    index_loaded = load_index_from_file("test_index_file4.txt")
+    pickle_save_data_to_file(index, config.get('index_path', 'index_path'))
+    index_loaded = pickle_load_from_file(
+        config.get('index_path', 'index_path'))
 
-    save_df_to_file(df, "test_df_file4.txt")
-    df_loaded = load_df_from_file("test_df_file4.txt")
+    pickle_save_data_to_file(df, config.get('df_path', 'df_path'))
+    df_loaded = pickle_load_from_file(config.get('df_path', 'df_path'))
 
     no_error = True
     for term in index:
@@ -98,4 +76,5 @@ def test():
     print(f"no_error : {no_error}")
 
 
-test()
+if __name__ == "__main__":
+    main()
