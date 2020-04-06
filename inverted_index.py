@@ -58,9 +58,10 @@ def main():
     collection = get_collection_from_corpus(corpus, stop_words)
     index, df = build_index(collection, IndexType.SIMPLE)
 
-    pickle_save_data_to_file(index, config.get('index_path', 'index_path'))
+    pickle_save_data_to_file(index, config.get(
+        'simple_index_path', 'simple_index_path'))
     index_loaded = pickle_load_from_file(
-        config.get('index_path', 'index_path'))
+        config.get('simple_index_path', 'simple_index_path'))
 
     pickle_save_data_to_file(df, config.get('df_path', 'df_path'))
     df_loaded = pickle_load_from_file(config.get('df_path', 'df_path'))
