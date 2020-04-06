@@ -1,5 +1,6 @@
 from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import RegexpTokenizer, word_tokenize
 
 from data_processing import load_data, load_stop_words, pickle_save_data_to_file, pickle_load_from_file
 from config_utils import load_config
@@ -17,6 +18,26 @@ def tokenize_simple(text):
     else:
         tokens = text.split(" ")
         return tokens
+
+
+def article_tokenize_other(text):
+    """
+    Separates text into tokens using a RegexpTokenizer.
+
+    :param text: input text (string)
+    :return: tokens (list of string)
+    """
+    if type(text) != str:
+        raise Exception("The function takes a string as input data")
+    else:
+        # Extract abbreviations
+        tokenizer = RegexpTokenizer('[a-zA-Z]\.[a-zA-Z]')
+        tokens = tokenizer.tokenize(text)
+
+        # Extract words and numbers
+        tokenizer = RegexpTokenizer('[a-zA-Z]{2,}|\d+\S?\d*')
+        word_tokens = tokenizer.tokenize(text)
+        return tokens + word_tokens
 
 
 def remove_stop_words(text_tokens, stop_words):
@@ -37,6 +58,17 @@ def lemmatize(tokens):
     """Lemmatize list of tokens"""
     lemmatizer = WordNetLemmatizer()
     return [lemmatizer.lemmatize(token) for token in tokens]
+
+
+def collection_lemmatize(segmented_collection):
+    """Lematize collection"""
+    lemmatized_collection = {}
+    stemmer = WordNetLemmatizer()
+    for i in segmented_collection:
+        lemmatized_collection[i] = []
+        for j in segmented_collection[i]:
+            lemmatized_collection[i].append(stemmer.lemmatize(j))
+    return lemmatized_collection
 
 
 def stemming(tokens):
