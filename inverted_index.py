@@ -23,7 +23,7 @@ def build_index(collection, type):
 
     index = {}
     df = {}
-    print("start building index")
+    print(f"start building index (type: {type})")
     for text_name in collection:
         print(f"build index for {text_name}")
         term_counter = collections.Counter(collection[text_name])
