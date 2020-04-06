@@ -61,29 +61,29 @@ def main():
 
     collection = get_collection_from_corpus(corpus, stop_words)
 
-    simple_index, simple_df = build_index(collection, IndexType.SIMPLE)
+    # simple_index, simple_df = build_index(collection, IndexType.SIMPLE)
 
-    pickle_save_data_to_file(simple_index, simple_index_path)
-    pickle_save_data_to_file(simple_df, df_path)
+    # pickle_save_data_to_file(simple_index, simple_index_path)
+    # pickle_save_data_to_file(simple_df, df_path)
 
     # df is the same than simple_df
     frequency_index, _ = build_index(collection, IndexType.FREQUENCY)
 
     pickle_save_data_to_file(frequency_index, frequency_index_path)
 
-    simple_index_loaded = pickle_load_from_file(simple_index_path)
+    # simple_index_loaded = pickle_load_from_file(simple_index_path)
 
     frequency_index_loaded = pickle_load_from_file(frequency_index_path)
 
-    df_loaded = pickle_load_from_file(df_path)
+    # df_loaded = pickle_load_from_file(df_path)
 
     no_error = True
-    for term in simple_index:
-        if simple_df[term] != df_loaded[term]:
-            no_error = False
-        for doc_name in simple_index[term]:
-            if doc_name not in simple_index_loaded[term]:
-                no_error = False
+    for term in frequency_index:
+        # if simple_df[term] != df_loaded[term]:
+        #     no_error = False
+        # for doc_name in simple_index[term]:
+        #     if doc_name not in simple_index_loaded[term]:
+        #         no_error = False
         for doc_name in frequency_index[term]:
             if doc_name not in frequency_index_loaded[term]:
                 no_error = False
