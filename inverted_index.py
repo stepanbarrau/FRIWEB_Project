@@ -23,7 +23,7 @@ def build_index(collection, type):
 
     index = {}
     df = {}
-    print("start building index")
+    print(f"start building index (type: {type})")
     for text_name in collection:
         print(f"build index for {text_name}")
         term_counter = collections.Counter(collection[text_name])
@@ -51,26 +51,41 @@ def main():
     config = load_config()
     data_path = config.get('data_path', 'data_path')
     stop_words_path = config.get('stop_words_path', 'stop_words_path')
+    simple_index_path = config.get('simple_index_path', 'simple_index_path')
+    df_path = config.get('df_path', 'df_path')
+    frequency_index_path = config.get(
+        'frequency_index_path', 'frequency_index_path')
 
     corpus = load_data(data_path)
     stop_words = load_stop_words(stop_words_path)
 
     collection = get_collection_from_corpus(corpus, stop_words)
-    index, df = build_index(collection, IndexType.SIMPLE)
 
-    pickle_save_data_to_file(index, config.get('index_path', 'index_path'))
-    index_loaded = pickle_load_from_file(
-        config.get('index_path', 'index_path'))
+    simple_index, simple_df = build_index(collection, IndexType.SIMPLE)
 
-    pickle_save_data_to_file(df, config.get('df_path', 'df_path'))
-    df_loaded = pickle_load_from_file(config.get('df_path', 'df_path'))
+    pickle_save_data_to_file(simple_index, simple_index_path)
+    pickle_save_data_to_file(simple_df, df_path)
+
+    # df is the same than simple_df
+    frequency_index, _ = build_index(collection, IndexType.FREQUENCY)
+
+    pickle_save_data_to_file(frequency_index, frequency_index_path)
+
+    simple_index_loaded = pickle_load_from_file(simple_index_path)
+
+    frequency_index_loaded = pickle_load_from_file(frequency_index_path)
+
+    df_loaded = pickle_load_from_file(df_path)
 
     no_error = True
-    for term in index:
-        if df[term] != df_loaded[term]:
+    for term in simple_index:
+        if simple_df[term] != df_loaded[term]:
             no_error = False
-        for doc_name in index[term]:
-            if doc_name not in index_loaded[term]:
+        for doc_name in simple_index[term]:
+            if doc_name not in simple_index_loaded[term]:
+                no_error = False
+        for doc_name in frequency_index[term]:
+            if doc_name not in frequency_index_loaded[term]:
                 no_error = False
 
     print(f"no_error : {no_error}")
