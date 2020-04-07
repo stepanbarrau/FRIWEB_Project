@@ -60,17 +60,6 @@ def lemmatize(tokens):
     return [lemmatizer.lemmatize(token) for token in tokens]
 
 
-def collection_lemmatize(segmented_collection):
-    """Lematize collection"""
-    lemmatized_collection = {}
-    stemmer = WordNetLemmatizer()
-    for i in segmented_collection:
-        lemmatized_collection[i] = []
-        for j in segmented_collection[i]:
-            lemmatized_collection[i].append(stemmer.lemmatize(j))
-    return lemmatized_collection
-
-
 def stemming(tokens):
     """Stem list of tokens"""
     stemmer = PorterStemmer()
