@@ -2,7 +2,7 @@ import math
 from collections import Counter
 from collections import OrderedDict
 
-from collection_processing import article_tokenize_other, lemmatize, remove_stop_words
+from collection_processing import tokenize_regex, lemmatize, remove_stop_words, process_text
 
 
 def remove_non_index_term(query, inverted_index):
@@ -16,14 +16,14 @@ def remove_non_index_term(query, inverted_index):
 
 def pre_processed_query(query, inverted_index, stop_words):
     """
-    Process raw query for vectorial vectorial query.
+    Process raw query for vectorial query.
 
     Tokenize, filter stop words and lemmatize query.
     :param query: (string) query
     :param inverted_index:
     :return:
     """
-    tokenized_query = article_tokenize_other(query)
+    tokenized_query = tokenize_regex(query)
     filtered_query = remove_non_index_term(tokenized_query, inverted_index)
     filtered_query = remove_stop_words(filtered_query, stop_words)
     normalized_query = lemmatize(filtered_query)
@@ -76,9 +76,7 @@ def get_stats_document(document):
     :param document: Document to get statistics on
     :return: (dict) stats
     """
-    counter = Counter()
-    for term in document:
-        counter.update([term])
+    counter = Counter(document)
     stats = dict()
     stats["max_frequency"] = counter.most_common(1)[0][1]
     stats["number_unique_terms"] = len(counter.items())
@@ -98,12 +96,6 @@ def get_stats_collection(collection):
 
 def process_vectorial_query(query, frequency_index, stop_words, stats_collection, weighting_scheme_document,
                             weighting_scheme_query):
-    # Set weighting schemes if not specified
-    if weighting_scheme_document is None:
-        weighting_scheme_document = "tf_idf_normalize"
-    if weighting_scheme_query is None:
-        weighting_scheme_query = "frequency"
-
     relevant_docs = {}
     counter_query = Counter()
     # Preprocess query
@@ -122,7 +114,6 @@ def process_vectorial_query(query, frequency_index, stop_words, stats_collection
             norm_query = norm_query + w_term_query * w_term_query
             for doc in frequency_index[term]:
                 w_term_doc = 0.
-                relevant_docs[doc] = 0.
                 if weighting_scheme_document == "binary":
                     w_term_doc = 1
                 if weighting_scheme_document == "frequency":
@@ -136,6 +127,6 @@ def process_vectorial_query(query, frequency_index, stop_words, stats_collection
                 if weighting_scheme_document == "tf_idf_logarithmic_normalize":
                     w_term_doc = get_normalized_logarithmic_term_frequency(term, doc, frequency_index, stats_collection
                                                                            ) * get_idf(term, frequency_index, nb_doc)
-                relevant_docs[doc] = relevant_docs[doc] + w_term_doc * w_term_query
+                relevant_docs[doc] = relevant_docs.get(doc, 0) + w_term_doc * w_term_query
     ordered_relevant_docs = OrderedDict(sorted(relevant_docs.items(), key=lambda t: t[1], reverse=True))
     return ordered_relevant_docs

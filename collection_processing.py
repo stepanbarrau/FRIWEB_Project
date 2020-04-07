@@ -20,7 +20,7 @@ def tokenize_simple(text):
         return tokens
 
 
-def article_tokenize_other(text):
+def tokenize_regex(text):
     """
     Separates text into tokens using a RegexpTokenizer.
 

@@ -27,19 +27,24 @@ if __name__ == "__main__":
     boolean = subparser.add_parser("boolean")
     vectorial = subparser.add_parser("vectorial")
 
-    vectorial.add_argument("--weight-query", type=str, choices=("boolean", "frequency"))
-    vectorial.add_argument("--weight-document", type=str,
+    vectorial.add_argument("--weight-query", type=str, default="frequercy", choices=("boolean", "frequency"))
+    vectorial.add_argument("--weight-document", type=str, default="tf_idf_normalize",
                            choices=("boolean", "frequency", "tf_idf_normalize", "tf_idf_logarithmic",
                                     "tf_idf_logarithmic_normalize"))
     args = parser.parse_args()
     config = load_config()
-    stop_words = load_stop_words(config.get('stop_words_path', 'stop_words_path'))
+    stop_words_path = config.get("stop_words_path", "stop_words_path")
+    queries_path = config.get("queries_path", "queries_path")
+    queries_output_path = config.get("queries_output_path", "queries_output_path")
+    simple_index_path = config.get("simple_index_path", "simple_index_path")
+    collection_path = config.get("collection_path", "collection_path")
+    frequency_index_path = config.get("frequency_index_path", "frequency_index_path")
 
-    queries_and_output = load_queries_and_output(config.get('queries_path', 'queries_path'), config.get(
-        'queries_output_path', 'queries_output_path'))
+    stop_words = load_stop_words(stop_words_path)
+    queries_and_output = load_queries_and_output(queries_path, queries_output_path)
 
     if args.model == "boolean":
-        inv_index = pickle_load_from_file(config.get('simple_index_path', 'simple_index_path'))
+        inv_index = pickle_load_from_file(simple_index_path)
         for query in queries_and_output:
             prediction = process_query_boolean(query, inv_index, stop_words)
             output = queries_and_output[query]
@@ -48,8 +53,8 @@ if __name__ == "__main__":
             print(
                 f"query '{query}': expected {len(output)} elements - got {len(prediction)} - {len(difference)} elements different")
     elif args.model == "vectorial":
-        collection = pickle_load_from_file(config.get('collection_path', 'collection_path'))
-        frequency_index = pickle_load_from_file(config.get("frequency_index_path", "frequency_index_path"))
+        collection = pickle_load_from_file(collection_path)
+        frequency_index = pickle_load_from_file(frequency_index_path)
         stats_collection = get_stats_collection(collection)
         for query in queries_and_output:
             prediction = process_vectorial_query(query, frequency_index, stop_words, stats_collection,
