@@ -45,16 +45,17 @@ if __name__ == "__main__":
             output = queries_and_output[query]
             difference = list(
                 set(prediction).symmetric_difference(set(output)))
-            print(f"""query '{query}': expected {len(output)} elements - got {len(prediction)} - {len(difference)} 
-            elements different""")
+            print(
+                f"query '{query}': expected {len(output)} elements - got {len(prediction)} - {len(difference)} elements different")
     elif args.model == "vectorial":
         collection = pickle_load_from_file(config.get('collection_path', 'collection_path'))
         frequency_index = pickle_load_from_file(config.get("frequency_index_path", "frequency_index_path"))
         stats_collection = get_stats_collection(collection)
         for query in queries_and_output:
-            prediction = get_vectorial_results(queries, frequency_index, stop_words, stats_collection, args)
+            prediction = process_vectorial_query(query, frequency_index, stop_words, stats_collection,
+                                                 args.weight_document, args.weight_query)
             output = queries_and_output[query]
             difference = list(
                 set(prediction).symmetric_difference(set(output)))
-            print(f"""query '{query}': expected {len(output)} elements - got {len(prediction)} - {len(difference)} 
-            elements different""")
+            print(
+                f"query '{query}': expected {len(output)} elements - got {len(prediction)} - {len(difference)} elements different")
