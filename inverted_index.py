@@ -58,7 +58,7 @@ def main():
 
     corpus = load_data(data_path)
     stop_words = load_stop_words(stop_words_path)
-
+    stop_words = []
     collection = get_collection_from_corpus(corpus, stop_words)
 
     simple_index, simple_df = build_index(collection, IndexType.SIMPLE)
