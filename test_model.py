@@ -31,8 +31,8 @@ if __name__ == "__main__":
     if args.model == "boolean":
         inv_index = pickle_load_from_file(simple_index_path)
         for query in queries_and_output:
-            query_stop_words = remove_query_from_stop_words(query, stop_words)
-            prediction = process_query_boolean(query, inv_index, stop_words)
+            stop_words_not_in_query = remove_query_from_stop_words(query, stop_words)
+            prediction = process_query_boolean(query, inv_index, stop_words_not_in_query)
             output = queries_and_output[query]
             difference = list(
                 set(prediction).symmetric_difference(set(output)))
@@ -43,8 +43,8 @@ if __name__ == "__main__":
         frequency_index = pickle_load_from_file(frequency_index_path)
         stats_collection = get_stats_collection(collection)
         for query in queries_and_output:
-            query_stop_words = remove_query_from_stop_words(query, stop_words)
-            prediction = process_vectorial_query(query, frequency_index, query_stop_words, stats_collection,
+            stop_words_not_in_query = remove_query_from_stop_words(query, stop_words)
+            prediction = process_vectorial_query(query, frequency_index, stop_words_not_in_query, stats_collection,
                                                  args.weight_document, args.weight_query)
             output = queries_and_output[query]
             difference = list(

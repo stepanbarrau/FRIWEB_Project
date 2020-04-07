@@ -101,13 +101,7 @@ def get_collection_from_corpus(corpus, stop_words):
 def remove_query_from_stop_words(query, stop_words):
     """Returns a copy of the stop words after having removed the words used in the query"""
     query_words = query.split()
-    query_stop_words = stop_words.copy()
-    for word in query_words:
-        try:
-            query_stop_words.remove(word)
-        except:
-            pass
-    return query_stop_words
+    return [sw for sw in stop_words if sw not in query_words]
 
 
 def main():
