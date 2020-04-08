@@ -50,15 +50,15 @@ def build_index(collection, type):
 def main():
     config = load_config()
     data_path = config.get('data_path', 'data_path')
-    stop_words_path = config.get('stop_words_path', 'stop_words_path')
     simple_index_path = config.get('simple_index_path', 'simple_index_path')
     df_path = config.get('df_path', 'df_path')
     frequency_index_path = config.get(
         'frequency_index_path', 'frequency_index_path')
 
     corpus = load_data(data_path)
-    stop_words = load_stop_words(stop_words_path)
+    # Testing not removing stop words from index
     stop_words = []
+
     collection = get_collection_from_corpus(corpus, stop_words)
 
     simple_index, simple_df = build_index(collection, IndexType.SIMPLE)

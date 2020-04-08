@@ -14,22 +14,6 @@ def remove_non_index_term(query, inverted_index):
     return query_filtered
 
 
-def pre_processed_query(query, inverted_index, stop_words):
-    """
-    Process raw query for vectorial query.
-
-    Tokenize, filter stop words and lemmatize query.
-    :param query: (string) query
-    :param inverted_index:
-    :return:
-    """
-    tokenized_query = tokenize_simple(query)
-    filtered_query = remove_non_index_term(tokenized_query, inverted_index)
-    filtered_query = remove_stop_words(filtered_query, stop_words)
-    normalized_query = lemmatize(filtered_query)
-    return normalized_query
-
-
 def get_term_frequency(term, doc_id, index_frequency):
     """Get the frequency of a term in a document of the collection."""
     return index_frequency[term][doc_id]
@@ -94,12 +78,23 @@ def get_stats_collection(collection):
     return stats
 
 
+def check_only_stop_words(query, stop_words):
+    """Checks whether the query contains only stop words"""
+    for word in query.split():
+        if word not in stop_words:
+            return False
+    return True
+
+
 def process_vectorial_query(query, frequency_index, stop_words, stats_collection,
                             weighting_scheme_document="tf_idf_normalize", weighting_scheme_query="frequency"):
     relevant_docs = {}
     counter_query = Counter()
+    # Check if query only contains stop words
+    remove_stop_words = not check_only_stop_words(query, stop_words)
+
     # Preprocess query
-    query_pre_processed = pre_processed_query(query, frequency_index, stop_words)
+    query_pre_processed = process_text(query, stop_words, remove_stop_words)
 
     nb_doc = stats_collection["nb_docs"]
     norm_query = 0.

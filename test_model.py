@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 
 from config_utils import load_config
-from collection_processing import remove_query_from_stop_words
 from data_processing import load_stop_words, pickle_load_from_file, pickle_save_data_to_file, load_queries_and_output
 from boolean_model import process_query_boolean
 from vectorial_model import process_vectorial_query, get_stats_collection
@@ -31,8 +30,7 @@ if __name__ == "__main__":
     if args.model == "boolean":
         inv_index = pickle_load_from_file(simple_index_path)
         for query in queries_and_output:
-            stop_words_not_in_query = remove_query_from_stop_words(query, stop_words)
-            prediction = process_query_boolean(query, inv_index, stop_words_not_in_query)
+            prediction = process_query_boolean(query, inv_index, stop_words)
             output = queries_and_output[query]
             difference = list(
                 set(prediction).symmetric_difference(set(output)))
@@ -43,8 +41,7 @@ if __name__ == "__main__":
         frequency_index = pickle_load_from_file(frequency_index_path)
         stats_collection = get_stats_collection(collection)
         for query in queries_and_output:
-            stop_words_not_in_query = remove_query_from_stop_words(query, stop_words)
-            prediction = process_vectorial_query(query, frequency_index, stop_words_not_in_query, stats_collection,
+            prediction = process_vectorial_query(query, frequency_index, stop_words, stats_collection,
                                                  args.weight_document, args.weight_query)
             output = queries_and_output[query]
             difference = list(
