@@ -5,8 +5,9 @@ from pathlib import Path
 
 def load_data(data_path):
     """
-    browses directory path in data_location.config:data_path
-    :return: a dictionary with keys as filenames (string) and content as file content (string)
+    Browses directory path in data_location.config:data_path.
+
+    :return: (dict) A dictionary with filenames as keys (string) and file content as values (string)
     """
     corpus = {}
     parse_file_tree(data_path, corpus)
@@ -33,6 +34,12 @@ def load_queries_and_output(query_path, query_output_path):
 
 
 def load_stop_words(filename):
+    """
+    Load stop words from file.
+
+    :param filename: (string) Path to file containing stop words
+    :return: (list) List of stop words
+    """
     with open(filename, 'r') as f:
         maj_stop_words = filter(lambda s: s != "", f.read().split("\n\n"))
         return [s.lower() for s in maj_stop_words]
@@ -40,9 +47,10 @@ def load_stop_words(filename):
 
 def parse_file_tree(path_name, corpus):
     """
-    recursively adds texts to corpus
-    :param path_name: starting path (string)
-    :param corpus: dictionary of texts
+    Recursively adds texts to corpus.
+
+    :param path_name: (string) Starting path
+    :param corpus: (dict) Dictionary of texts
     :return: None
     """
     path = Path(path_name)
@@ -55,6 +63,13 @@ def parse_file_tree(path_name, corpus):
 
 
 def load_file_to_corpus(filepath, corpus):
+    """
+    Adds a file to corpus.
+
+    :param filepath: (string) Path to file to add to corpus
+    :param corpus: (dict) Dictionary of texts
+    :return: None
+    """
     with open(filepath, 'r') as f:
         path, filename = os.path.split(filepath)
         _, folder = os.path.split(path)
@@ -63,6 +78,13 @@ def load_file_to_corpus(filepath, corpus):
 
 
 def pickle_save_data_to_file(data, path):
+    """
+    Save data to pickle file.
+
+    :param data: (dict) Corpus dictionary to save
+    :param path: (string) Path of file to save to
+    :return: None
+    """
     dir, _ = os.path.split(path)
     if not os.path.exists(dir):
         os.makedirs(dir)
@@ -72,6 +94,7 @@ def pickle_save_data_to_file(data, path):
 
 
 def pickle_load_from_file(path):
+    """Load data from pickle file"""
     with open(path, 'rb') as f:
         data = pickle.load(f)
         return data

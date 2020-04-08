@@ -38,10 +38,10 @@ def build_index(collection, type):
 
         if type == IndexType.FREQUENCY:
             for term in term_counter:
-                index[term] = index.setdefault(term, [])
+                index[term] = index.setdefault(term, {})
                 df[term] = df.setdefault(term, 0)
 
-                index[term].append((text_name, term_counter[term]))
+                index[term].update({text_name: term_counter[term]})
                 df[term] += 1
     print("done building index")
     return index, df

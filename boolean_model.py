@@ -5,7 +5,8 @@ from collection_processing import process_text
 
 def processed_query_to_and_boolean(query_tokens):
     """
-    transform query tokens to boolean query tokens
+    Transform query tokens to boolean query tokens.
+
     :param query_tokens: query words (list of string)
     :return: query tokens with "and" between (list of string)
     """
