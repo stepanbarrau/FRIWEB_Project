@@ -9,7 +9,7 @@ The search engine takes text queries (exemples provided in the data folder) and 
 
 This project is written with **Python 3**. All the following commands using python are implicitly using Python 3.
 
-Download the full dataset [here](http://web.stanford.edu/class/cs276/pa/pa1-data.zip).
+Download the full dataset [here](TODO-link-to-drive).
 It contains the corpus, queries, stop words, pre-computed collection and indexes.
 
 Put it at the root of this repository.
