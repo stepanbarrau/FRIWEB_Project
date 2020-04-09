@@ -1,6 +1,6 @@
 from tt import BooleanExpression
 from collections import Counter
-from collection_processing import process_text
+from collection_processing import process_text, check_only_stop_words
 
 
 def processed_query_to_and_boolean(query_tokens):
@@ -120,7 +120,9 @@ def process_query_boolean(query, inverted_index, stop_words):
     :param stop_words: to filter stop words in query (list of string)
     :return: documents relevant for the query (list of string)
     """
-    processed_query = process_text(query, stop_words)
+    # Check if query only contains stop words
+    remove_stop_words = not check_only_stop_words(query, stop_words)
+    processed_query = process_text(query, stop_words, remove_stop_words)
     # Filter off words that are not in the index
     processed_query = list(filter(
         lambda token: token in inverted_index.keys(), processed_query))
