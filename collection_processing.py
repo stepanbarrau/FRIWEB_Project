@@ -3,7 +3,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import RegexpTokenizer, word_tokenize
 
 from data_processing import load_data, load_stop_words, pickle_save_data_to_file, pickle_load_from_file
-from config_utils import load_config
+from config import CORPUS_DIRECTORY_PATH, STOP_WORDS_FILE_PATH, COLLECTION_FILE_PATH
 
 
 def tokenize_simple(text):
@@ -107,21 +107,15 @@ def remove_query_from_stop_words(query, stop_words):
 
 
 def main():
-    config = load_config()
-    data_path = config.get('data_path', 'data_path')
-    stop_words_path = config.get('stop_words_path', 'stop_words_path')
-
-    corpus = load_data(data_path)
-    stop_words = load_stop_words(stop_words_path)
+    corpus = load_data(CORPUS_DIRECTORY_PATH)
+    stop_words = load_stop_words(STOP_WORDS_FILE_PATH)
 
     collection = get_collection_from_corpus(corpus, stop_words)
 
-    pickle_save_data_to_file(
-        collection, config.get('collection_path', 'collection_path'))
+    pickle_save_data_to_file(collection, COLLECTION_FILE_PATH)
 
     # This tests whether the save and load are done correctly
-    collection_loaded = pickle_load_from_file(
-        config.get('collection_path', 'collection_path'))
+    collection_loaded = pickle_load_from_file(COLLECTION_FILE_PATH)
 
     for term in collection:
         if term not in collection_loaded or collection[term] != collection_loaded[term]:
