@@ -16,7 +16,30 @@ Duplicate the `data_location.template.config`, renaming it as `data_location.con
 If you wish to filter stop words, add a file named `stop_words.txt`
 at the root of this repository. The format must be one stop word per line.
 
-## Structure of the project
+Run `python collection_processing.py` in order to load the raw texts from the dataset,
+process them into a usable format described below, and write the so-obtained collection
+to a file. 
+
+After that, you may test the system, using your queries and outputs
+ by creating the directories `data\queries\dev_queries` and `data\queries\dev_output`
+ 
+ 
+ Inside `data\queries\dev_queries`, add each query as a text file named `query.X` where 
+ X is the number of the query. Inside `data\queries\dev_output`, add the corresponding 
+ desired outputs, with names `X.out`.
+ 
+ Finally, run `python test_model.py`. You can use options to specify what type of model you would 
+ like to use. The options:
+ 
+ `python test_model.py boolean`
+ 
+ ```
+ python test_model.py vectorial --weight-query    {boolean, frequency} 
+                                --weight-document {boolean, frequency, tf_idf_normalize, 
+                                                   tf_idf_logarithmic, tf_idf_logarithmic_normalize}
+ ```
+ 
+ are available.
 
 ## Method
 
