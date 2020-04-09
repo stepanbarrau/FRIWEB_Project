@@ -7,39 +7,58 @@ The search engine takes text queries (exemples provided in the data folder) and 
 
 ## Set up
 
-Download the dataset [here](http://web.stanford.edu/class/cs276/pa/pa1-data.zip).
+This project is written with **Python 3**. All the following commands using python are implicitly using Python 3.
+
+Download the full dataset [here](http://web.stanford.edu/class/cs276/pa/pa1-data.zip).
+It contains the corpus, queries, stop words, pre-computed collection and indexes.
 
 Put it at the root of this repository.
+Check that it matches the paths in `config.py`.
 
-Duplicate the `data_location.template.config`, renaming it as `data_location.config` and change the data path if needed.
+Run the following command to install requirements (it is recommanded to use a virtual env):
 
-If you wish to filter stop words, add a file named `stop_words.txt`
-at the root of this repository. The format must be one stop word per line.
+```
+pip install -r requirements.txt
+```
 
-Run `python collection_processing.py` in order to load the raw texts from the dataset,
-process them into a usable format described below, and write the so-obtained collection
-to a file. 
+### Generate collection and inverted index
 
-After that, you may test the system, using your queries and outputs
- by creating the directories `data\queries\dev_queries` and `data\queries\dev_output`
- 
- 
- Inside `data\queries\dev_queries`, add each query as a text file named `query.X` where 
- X is the number of the query. Inside `data\queries\dev_output`, add the corresponding 
- desired outputs, with names `X.out`.
- 
- Finally, run `python test_model.py`. You can use options to specify what type of model you would 
- like to use. The options:
- 
- `python test_model.py boolean`
- 
- ```
- python test_model.py vectorial --weight-query    {boolean, frequency} 
-                                --weight-document {boolean, frequency, tf_idf_normalize, 
-                                                   tf_idf_logarithmic, tf_idf_logarithmic_normalize}
- ```
- 
- are available.
+_Note: Skip this section if you have downloaded the full dataset, with corpus, queries, stop words and pre-computed collection and index._
+
+Requirements (all these files and folders should be under the `data/` directory):
+
+- [Stanford corpus](http://web.stanford.edu/class/cs276/pa/pa1-data.zip) as `pa1-data`
+- [Queries](https://drive.google.com/open?id=1B5flJ48VN2x5XNXRJ1zWpEyopoxrvrCT) as `queries`
+- [TIME.STP](http://ir.dcs.gla.ac.uk/resources/test_collections/time/) as `stop_words.txt`
+
+To generate the collection, run:
+
+```
+python collection_processing.py
+```
+
+This will load the raw texts from the dataset, process them into the usable format described below, and write the collection to `data/collection.pkl`.
+
+Then build the inverted indexes (`simple` and `frequency`) with the following command:
+
+```
+python inverted_index.py
+```
+
+### Test the models
+
+To test the model, run the script `test_model.py`.
+You have to use the following options to specify what type of model you would like to use:
+
+```
+python test_model.py boolean
+```
+
+```
+python test_model.py vectorial --weight-query    {boolean, frequency}
+                               --weight-document {boolean, frequency, tf_idf_normalize,
+                                                  tf_idf_logarithmic, tf_idf_logarithmic_normalize}
+```
 
 ## Method
 
