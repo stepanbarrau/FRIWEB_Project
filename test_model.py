@@ -5,22 +5,6 @@ from data_processing import load_stop_words, pickle_load_from_file, pickle_save_
 from boolean_model import process_query_boolean
 from vectorial_model import process_vectorial_query, get_stats_collection
 
-
-def get_boolean_results(queries, inv_index, stop_words):
-    results = []
-    for query in queries:
-        results.append(process_query_boolean(query, inv_index, stop_words))
-    return results
-
-
-def get_vectorial_results(queries, inv_index, stop_words, stats_collection, args):
-    results = []
-    for query in queries:
-        results.append(process_vectorial_query(query, inv_index, stop_words, stats_collection,
-                                               args.weight_document, args.weight_query))
-    return results
-
-
 if __name__ == "__main__":
     parser = ArgumentParser()
     subparser = parser.add_subparsers(dest="model")

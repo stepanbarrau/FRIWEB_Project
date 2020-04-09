@@ -66,17 +66,19 @@ def stemming(tokens):
     return [stemmer.stem(token) for token in tokens]
 
 
-def process_text(text, stop_words):
+def process_text(text, stop_words, rm_stop_words=True):
     """
-    Split the text into tokens, remove the stop words, lemmatize and stem tokens.
+    Split the text into tokens, remove the stop words unless specified not to, lemmatize and stem tokens.
 
     :param text: (string)
     :param stop_words: (list of string)
+    :param rm_stop_words: (bool)
     :return: stemmed_words (list of string)
     """
-    raw_words = tokenize_simple(text)
-    filtered_words = remove_stop_words(raw_words, stop_words)
-    lemmatized_words = lemmatize(filtered_words)
+    words = tokenize_simple(text)
+    if rm_stop_words:
+        words = remove_stop_words(words, stop_words)
+    lemmatized_words = lemmatize(words)
     stemmed_words = stemming(lemmatized_words)
     return stemmed_words
 
@@ -96,6 +98,12 @@ def get_collection_from_corpus(corpus, stop_words):
         collection[key] = process_text(corpus[key], stop_words)
     print("done building collection")
     return collection
+
+
+def remove_query_from_stop_words(query, stop_words):
+    """Returns a copy of the stop words after having removed the words used in the query"""
+    query_words = query.split()
+    return [sw for sw in stop_words if sw not in query_words]
 
 
 def main():
