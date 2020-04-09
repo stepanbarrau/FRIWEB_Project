@@ -81,24 +81,23 @@ def get_stats_collection(collection):
 def process_vectorial_query(query, frequency_index, stop_words, stats_collection,
                             weighting_scheme_document="tf_idf_normalize", weighting_scheme_query="frequency"):
     relevant_docs = {}
-    counter_query = Counter()
+    doc_norm = {}
     # Check if query only contains stop words
     remove_stop_words = not check_only_stop_words(query, stop_words)
 
     # Preprocess query
     query_pre_processed = process_text(query, stop_words, remove_stop_words)
-
+    counter_query = Counter(query_pre_processed)
     nb_doc = stats_collection["nb_docs"]
-    norm_query = 0.
-    for term in query_pre_processed:
+
+    for term in set(query_pre_processed):
         if term in frequency_index:
             w_term_query = 0.
-            counter_query.update([term])
             if weighting_scheme_query == "binary":
                 w_term_query = 1
             if weighting_scheme_query == "frequency":
                 w_term_query = counter_query[term]
-            norm_query = norm_query + w_term_query * w_term_query
+
             for doc in frequency_index[term]:
                 w_term_doc = 0.
                 if weighting_scheme_document == "binary":
@@ -115,5 +114,7 @@ def process_vectorial_query(query, frequency_index, stop_words, stats_collection
                     w_term_doc = get_normalized_logarithmic_term_frequency(term, doc, frequency_index, stats_collection
                                                                            ) * get_idf(term, frequency_index, nb_doc)
                 relevant_docs[doc] = relevant_docs.get(doc, 0) + w_term_doc * w_term_query
+                doc_norm[doc] = doc_norm.get(doc, 0) + w_term_doc * w_term_doc
+    relevant_docs = {doc: relevant_docs[doc] / math.sqrt(doc_norm[doc]) for doc in relevant_docs}
     ordered_relevant_docs = OrderedDict(sorted(relevant_docs.items(), key=lambda t: t[1], reverse=True))
     return ordered_relevant_docs
