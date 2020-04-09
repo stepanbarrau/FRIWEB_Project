@@ -12,6 +12,7 @@ Put it at the root of this repository.
 
 Duplicate the `data_location.template.config`, renaming it as `data_location.config` and change the data path if needed.
 
+
 If you wish to filter stop words, add a file named `stop_words.txt` 
 at the root of this repository. The format must be one stop word per line.
 

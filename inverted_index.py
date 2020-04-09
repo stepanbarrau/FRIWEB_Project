@@ -2,7 +2,7 @@ import collections
 from enum import Enum
 from collection_processing import get_collection_from_corpus
 from data_processing import load_data, load_stop_words, pickle_save_data_to_file, pickle_load_from_file
-from config_utils import load_config
+from config import CORPUS_DIRECTORY_PATH, SIMPLE_INDEX_FILE_PATH, FREQUENCY_INDEX_FILE_PATH, DF_FILE_PATH
 
 
 class IndexType(Enum):
@@ -48,12 +48,10 @@ def build_index(collection, type):
 
 
 def main():
-    config = load_config()
-    data_path = config.get('data_path', 'data_path')
-    simple_index_path = config.get('simple_index_path', 'simple_index_path')
-    df_path = config.get('df_path', 'df_path')
-    frequency_index_path = config.get(
-        'frequency_index_path', 'frequency_index_path')
+    data_path = CORPUS_DIRECTORY_PATH
+    simple_index_path = SIMPLE_INDEX_FILE_PATH
+    frequency_index_path = FREQUENCY_INDEX_FILE_PATH
+    df_path = DF_FILE_PATH
 
     corpus = load_data(data_path)
     # Testing not removing stop words from index
