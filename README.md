@@ -138,17 +138,35 @@ Our vectorial model is defined in `vectorial_model.py`.
 
 ### Performance Evaluation
 
-To measure performances, we have written `test_model.py`, a script that is processing all queries, and comparing the predictions with the expected output given with the dataset.
+To measure performances, we are using `test_model.py`, a script that is processing all queries, and comparing the predictions with the expected output given with the dataset.
 The script allows to test both models.
 
 The results for the boolean model are:
 
 ```
-
+query 'the the': expected 81770 elements - got 81769 - 1 elements different
+query 'stanford computer science': expected 4232 elements - got 813 - 3839 elements different
+query 'we are': expected 12409 elements - got 6111 - 6306 elements different
+query 'a': expected 66675 elements - got 68966 - 2295 elements different
+query 'stanford students': expected 22335 elements - got 12605 - 14340 elements different
+query 'very cool': expected 63 elements - got 777 - 716 elements different
+query 'the': expected 81770 elements - got 81769 - 1 elements different
+query 'stanford class': expected 6094 elements - got 2414 - 5126 elements different
 ```
 
 And the results for the vectorial model are:
 
 ```
-
+query 'the the': expected 81770 elements - got 81769 - 1 elements different
+query 'stanford computer science': expected 4232 elements - got 74658 - 70426 elements different
+query 'we are': expected 12409 elements - got 45490 - 33081 elements different
+query 'a': expected 66675 elements - got 68966 - 2295 elements different
+query 'stanford students': expected 22335 elements - got 72921 - 50586 elements different
+query 'very cool': expected 63 elements - got 777 - 716 elements different
+query 'the': expected 81770 elements - got 81769 - 1 elements different
+query 'stanford class': expected 6094 elements - got 73118 - 67024 elements different
 ```
+
+Our boolean model seems to return less accurate documents that what is expected. On the other side, our vectorial model is predicting much more accurate document than expected. This is understandable: since the boolean model is only keeping documents that contains **all** the terms, it is likely to be more restrictive.
+
+We notice that performances are good on queries containing only stop words. However, performances aren't very good on the other queries. The boolean model still seems to have better performances than the vectorial, because the later is returning too much documents.
