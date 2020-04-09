@@ -106,6 +106,13 @@ def remove_query_from_stop_words(query, stop_words):
     return [sw for sw in stop_words if sw not in query_words]
 
 
+def check_only_stop_words(query, stop_words):
+    """Checks whether the query contains only stop words"""
+    for word in query.split():
+        if word not in stop_words:
+            return False
+    return True
+
 def main():
     corpus = load_data(CORPUS_DIRECTORY_PATH)
     stop_words = load_stop_words(STOP_WORDS_FILE_PATH)

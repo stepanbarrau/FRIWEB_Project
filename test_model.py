@@ -11,7 +11,7 @@ if __name__ == "__main__":
     boolean = subparser.add_parser("boolean")
     vectorial = subparser.add_parser("vectorial")
 
-    vectorial.add_argument("--weight-query", type=str, default="frequercy", choices=("boolean", "frequency"))
+    vectorial.add_argument("--weight-query", type=str, default="frequency", choices=("boolean", "frequency"))
     vectorial.add_argument("--weight-document", type=str, default="tf_idf_normalize",
                            choices=("boolean", "frequency", "tf_idf_normalize", "tf_idf_logarithmic",
                                     "tf_idf_logarithmic_normalize"))

@@ -2,7 +2,7 @@ import math
 from collections import Counter
 from collections import OrderedDict
 
-from collection_processing import tokenize_simple, lemmatize, remove_stop_words, process_text
+from collection_processing import tokenize_simple, lemmatize, remove_stop_words, process_text, check_only_stop_words
 
 
 def remove_non_index_term(query, inverted_index):
@@ -76,14 +76,6 @@ def get_stats_collection(collection):
     for doc in collection:
         stats[doc] = get_stats_document(collection[doc])
     return stats
-
-
-def check_only_stop_words(query, stop_words):
-    """Checks whether the query contains only stop words"""
-    for word in query.split():
-        if word not in stop_words:
-            return False
-    return True
 
 
 def process_vectorial_query(query, frequency_index, stop_words, stats_collection,
