@@ -134,6 +134,12 @@ Our boolean model is defined in `boolean_model.py`.
 
 ### Vectorial Model
 
+A vectorial model is a statistical model that takes into account the frequency of words in the collections documents and in the query.
+The idea is to compare vectors that represent the query and the documents in the collection and to choose the queries that are closest.
+In this project, there has been no selection of documents returned by the vectorial model. This means that even though the order of the output is probably better that with the boolean model, the documents in the output are the same.
+
+The weight function for the query and documents can easily be chosen when running the model as described in the *Set up* section.
+
 Our vectorial model is defined in `vectorial_model.py`.
 
 ### Performance Evaluation
