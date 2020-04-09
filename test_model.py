@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 
-from config_utils import load_config
+from config import STOP_WORDS_FILE_PATH, QUERIES_INPUT_PATH, QUERIES_OUTPUT_PATH, SIMPLE_INDEX_FILE_PATH, FREQUENCY_INDEX_FILE_PATH, COLLECTION_FILE_PATH
 from data_processing import load_stop_words, pickle_load_from_file, pickle_save_data_to_file, load_queries_and_output
 from boolean_model import process_query_boolean
 from vectorial_model import process_vectorial_query, get_stats_collection
@@ -16,13 +16,13 @@ if __name__ == "__main__":
                            choices=("boolean", "frequency", "tf_idf_normalize", "tf_idf_logarithmic",
                                     "tf_idf_logarithmic_normalize"))
     args = parser.parse_args()
-    config = load_config()
-    stop_words_path = config.get("stop_words_path", "stop_words_path")
-    queries_path = config.get("queries_path", "queries_path")
-    queries_output_path = config.get("queries_output_path", "queries_output_path")
-    simple_index_path = config.get("simple_index_path", "simple_index_path")
-    collection_path = config.get("collection_path", "collection_path")
-    frequency_index_path = config.get("frequency_index_path", "frequency_index_path")
+
+    stop_words_path = STOP_WORDS_FILE_PATH
+    queries_path = QUERIES_INPUT_PATH
+    queries_output_path = QUERIES_OUTPUT_PATH
+    simple_index_path = SIMPLE_INDEX_FILE_PATH
+    frequency_index_path = FREQUENCY_INDEX_FILE_PATH
+    collection_path = COLLECTION_FILE_PATH
 
     stop_words = load_stop_words(stop_words_path)
     queries_and_output = load_queries_and_output(queries_path, queries_output_path)
