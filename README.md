@@ -9,7 +9,7 @@ The search engine takes text queries (exemples provided in the data folder) and 
 
 This project is written with **Python 3**. All the following commands using python are implicitly using Python 3.
 
-Download the full dataset [here](TODO-link-to-drive).
+Download the full dataset [here](https://drive.google.com/open?id=1zLPHK_Wv3WFsC5Zww2EEvW_7Yt1Djvhj).
 It contains the corpus, queries, stop words, pre-computed collection and indexes.
 
 Put it at the root of this repository.
