@@ -7,39 +7,58 @@ The search engine takes text queries (exemples provided in the data folder) and 
 
 ## Set up
 
-Download the dataset [here](http://web.stanford.edu/class/cs276/pa/pa1-data.zip).
+This project is written with **Python 3**. All the following commands using python are implicitly using Python 3.
+
+Download the full dataset [here](https://drive.google.com/open?id=1zLPHK_Wv3WFsC5Zww2EEvW_7Yt1Djvhj).
+It contains the corpus, queries, stop words, pre-computed collection and indexes.
 
 Put it at the root of this repository.
+Check that it matches the paths in `config.py`.
 
-Duplicate the `data_location.template.config`, renaming it as `data_location.config` and change the data path if needed.
+Run the following command to install requirements (it is recommanded to use a virtual env):
 
-If you wish to filter stop words, add a file named `stop_words.txt`
-at the root of this repository. The format must be one stop word per line.
+```
+pip install -r requirements.txt
+```
 
-Run `python collection_processing.py` in order to load the raw texts from the dataset,
-process them into a usable format described below, and write the so-obtained collection
-to a file. 
+### Generate collection and inverted index
 
-After that, you may test the system, using your queries and outputs
- by creating the directories `data\queries\dev_queries` and `data\queries\dev_output`
- 
- 
- Inside `data\queries\dev_queries`, add each query as a text file named `query.X` where 
- X is the number of the query. Inside `data\queries\dev_output`, add the corresponding 
- desired outputs, with names `X.out`.
- 
- Finally, run `python test_model.py`. You can use options to specify what type of model you would 
- like to use. The options:
- 
- `python test_model.py boolean`
- 
- ```
- python test_model.py vectorial --weight-query    {boolean, frequency} 
-                                --weight-document {boolean, frequency, tf_idf_normalize, 
-                                                   tf_idf_logarithmic, tf_idf_logarithmic_normalize}
- ```
- 
- are available.
+_Note: Skip this section if you have downloaded the full dataset, with corpus, queries, stop words and pre-computed collection and index._
+
+Requirements (all these files and folders should be under the `data/` directory):
+
+- [Stanford corpus](http://web.stanford.edu/class/cs276/pa/pa1-data.zip) as `pa1-data`
+- [Queries](https://drive.google.com/open?id=1B5flJ48VN2x5XNXRJ1zWpEyopoxrvrCT) as `queries`
+- [TIME.STP](http://ir.dcs.gla.ac.uk/resources/test_collections/time/) as `stop_words.txt`
+
+To generate the collection, run:
+
+```
+python collection_processing.py
+```
+
+This will load the raw texts from the dataset, process them into the usable format described below, and write the collection to `data/collection.pkl`.
+
+Then build the inverted indexes (`simple` and `frequency`) with the following command:
+
+```
+python inverted_index.py
+```
+
+### Test the models
+
+To test the model, run the script `test_model.py`.
+You have to use the following options to specify what type of model you would like to use:
+
+```
+python test_model.py boolean
+```
+
+```
+python test_model.py vectorial --weight-query    {boolean, frequency}
+                               --weight-document {boolean, frequency, tf_idf_normalize,
+                                                  tf_idf_logarithmic, tf_idf_logarithmic_normalize}
+```
 
 ## Method
 
@@ -138,17 +157,35 @@ Our vectorial model is defined in `vectorial_model.py`.
 
 ### Performance Evaluation
 
-To measure performances, we have written `test_model.py`, a script that is processing all queries, and comparing the predictions with the expected output given with the dataset.
+To measure performances, we are using `test_model.py`, a script that is processing all queries, and comparing the predictions with the expected output given with the dataset.
 The script allows to test both models.
 
 The results for the boolean model are:
 
 ```
-
+query 'the the': expected 81770 elements - got 81769 - 1 elements different
+query 'stanford computer science': expected 4232 elements - got 813 - 3839 elements different
+query 'we are': expected 12409 elements - got 6111 - 6306 elements different
+query 'a': expected 66675 elements - got 68966 - 2295 elements different
+query 'stanford students': expected 22335 elements - got 12605 - 14340 elements different
+query 'very cool': expected 63 elements - got 777 - 716 elements different
+query 'the': expected 81770 elements - got 81769 - 1 elements different
+query 'stanford class': expected 6094 elements - got 2414 - 5126 elements different
 ```
 
 And the results for the vectorial model are:
 
 ```
-
+query 'the the': expected 81770 elements - got 81769 - 1 elements different
+query 'stanford computer science': expected 4232 elements - got 74658 - 70426 elements different
+query 'we are': expected 12409 elements - got 45490 - 33081 elements different
+query 'a': expected 66675 elements - got 68966 - 2295 elements different
+query 'stanford students': expected 22335 elements - got 72921 - 50586 elements different
+query 'very cool': expected 63 elements - got 777 - 716 elements different
+query 'the': expected 81770 elements - got 81769 - 1 elements different
+query 'stanford class': expected 6094 elements - got 73118 - 67024 elements different
 ```
+
+Our boolean model seems to return less accurate documents that what is expected. On the other side, our vectorial model is predicting much more accurate document than expected. This is understandable: since the boolean model is only keeping documents that contains **all** the terms, it is likely to be more restrictive.
+
+We notice that performances are good on queries containing only stop words. However, performances aren't very good on the other queries. The boolean model still seems to have better performances than the vectorial, because the later is returning too much documents.
