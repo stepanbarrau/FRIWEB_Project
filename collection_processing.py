@@ -113,6 +113,7 @@ def check_only_stop_words(query, stop_words):
             return False
     return True
 
+
 def main():
     corpus = load_data(CORPUS_DIRECTORY_PATH)
     stop_words = load_stop_words(STOP_WORDS_FILE_PATH)

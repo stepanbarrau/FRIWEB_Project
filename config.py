@@ -20,3 +20,6 @@ INDEX_DIRECTORY_PATH = os.path.join(DATA_DIRECTORY_PATH, "index")
 SIMPLE_INDEX_FILE_PATH = os.path.join(INDEX_DIRECTORY_PATH, "simple_index.pkl")
 FREQUENCY_INDEX_FILE_PATH = os.path.join(INDEX_DIRECTORY_PATH, "frequency_index.pkl")
 DF_FILE_PATH = os.path.join(INDEX_DIRECTORY_PATH, "df_file.pkl")
+# Test output paths
+VECTORIAL_RESULTS_DIRECTORY_PATH = os.path.join(DATA_DIRECTORY_PATH, "vectorial_results")
+BOOLEAN_RESULTS_DIRECTORY_PATH = os.path.join(DATA_DIRECTORY_PATH, "boolean_results")
