@@ -9,27 +9,59 @@ The search engine takes text queries (exemples provided in the data folder) and 
 
 This project is written with **Python 3**. All the following commands using python are implicitly using Python 3.
 
-Download the full dataset [here](https://drive.google.com/open?id=1zLPHK_Wv3WFsC5Zww2EEvW_7Yt1Djvhj).
-It contains the corpus, queries, stop words, pre-computed collection and indexes.
-
-Put it at the root of this repository.
-Check that it matches the paths in `config.py`.
-
 Run the following command to install requirements (it is recommanded to use a virtual env):
 
 ```
 pip install -r requirements.txt
 ```
 
+### Set up dataset
+
+Download all the following files and folders. Put them under the `data/` directory:
+
+- [Stanford corpus](http://web.stanford.edu/class/cs276/pa/pa1-data.zip) as `pa1-data` subfolder
+- [Queries](https://drive.google.com/open?id=1B5flJ48VN2x5XNXRJ1zWpEyopoxrvrCT) as `queries` subfolder
+- [stop_words.txt](https://drive.google.com/open?id=1BXhol8psQ58gGWMSsMzpLdJsj_NwzV7Z) as `stop_words.txt` file
+
+To save time, you can download the following zip files and unzip them in `data/`. Then you can skip the next section `Generate collection and inverted index`.
+
+- [collection.pkl](https://drive.google.com/open?id=1XTuIS_vvFzh51HKtjR-hwxtlqz7GpbED) as `collection.pkl` file
+- [index](https://drive.google.com/open?id=1-veMyoUPYUHms3RYzymARKiNAfvYS8DM) as `index` subfolder
+
+Check paths in the `config.py` folder to make sure you have properly set up the dataset.
+The full dataset should have the following structure:
+
+- `data/`
+  - `index/`
+    - `df_file.pkl`
+    - `frequency_index.pkl`
+    - `simple_index.pkl`
+  - `pa1-data/`
+    - `0/`
+    - `1/`
+    - `2/`
+    - `3/`
+    - `4/`
+    - `5/`
+    - `6/`
+    - `7/`
+    - `8/`
+    - `9/`
+  - `queries/`
+    - `dev_ouput/`
+    - `dev_queries/`
+  - `collection.pkl`
+  - `stop_words.txt`
+
 ### Generate collection and inverted index
 
-_Note: Skip this section if you have downloaded the full dataset, with corpus, queries, stop words and pre-computed collection and index._
+_Note: Skip this section if you have downloaded the full dataset, including the pre-computed collection and index pickle files._
 
-Requirements (all these files and folders should be under the `data/` directory):
+Requirements from previous section:
 
-- [Stanford corpus](http://web.stanford.edu/class/cs276/pa/pa1-data.zip) as `pa1-data`
-- [Queries](https://drive.google.com/open?id=1B5flJ48VN2x5XNXRJ1zWpEyopoxrvrCT) as `queries`
-- [TIME.STP](http://ir.dcs.gla.ac.uk/resources/test_collections/time/) as `stop_words.txt`
+- `data/pa1-data`
+- `data/queries`
+- `data/stop_words.txt`
 
 To generate the collection, run:
 
@@ -46,6 +78,8 @@ python inverted_index.py
 ```
 
 ### Test the models
+
+_Requirements from previous sections: the full dataset._
 
 To test the model, run the script `test_model.py`.
 You have to use the following options to specify what type of model you would like to use:
@@ -157,7 +191,7 @@ A vectorial model is a statistical model that takes into account the frequency o
 The idea is to compare vectors that represent the query and the documents in the collection and to choose the queries that are closest.
 In this project, there has been no selection of documents returned by the vectorial model. This means that even though the order of the output is probably better that with the boolean model, the documents in the output are the same.
 
-The weight function for the query and documents can easily be chosen when running the model as described in the *Set up* section.
+The weight function for the query and documents can easily be chosen when running the model as described in the _Set up_ section.
 
 Our vectorial model is defined in `vectorial_model.py`.
 
