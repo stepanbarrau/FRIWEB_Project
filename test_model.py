@@ -53,4 +53,4 @@ if __name__ == "__main__":
                 set(prediction).symmetric_difference(set(output)))
             print(
                 f"query '{query}': expected {len(output)} elements - got {len(prediction)} - {len(difference)} elements different")
-            save_strings_as_text_file(prediction, os.path.join(vectorial_results_directory_path, f"results_{i}")
+            save_strings_as_text_file(prediction, os.path.join(vectorial_results_directory_path, f"results_{i}"))
