@@ -1,6 +1,7 @@
 # FRIWEB Project
 
-This is a search engine made for a course at CentraleSupélec.
+This is a search engine made for a course at CentraleSupélec by _Stepan Barrau_, _Owain Bidulph_ and _Quentin Verlhac_.
+
 We are working with a dataset from Stanford, available [here](http://web.stanford.edu/class/cs276/pa/pa1-data.zip).
 
 The search engine takes text queries (exemples provided in the data folder) and answers with the id of relevant documents. We do not sort the documents by importance.
