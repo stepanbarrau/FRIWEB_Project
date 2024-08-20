@@ -1,6 +1,6 @@
 configparser==5.0.0
 Cython==0.29.16
-nltk==3.4.5
+nltk==3.9
 numpy==1.18.2
 pathlib==1.0.1
 six==1.14.0
